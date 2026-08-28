@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Portfolio site for Samuel McMillan — AI/ML engineer and systems leader.">
+<title>Samuel McMillan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+  /* ============ Tokens ============ */
+  :root{
+    --bg: #edf1ee;
+    --surface: #ffffff;
+    --surface-2: #dfe6e1;
+    --line: #cdd7d1;
+    --text: #10201c;
+    --text-muted: #4e5f59;
+    --accent: #b25e28;
+    --accent-ink: #ffffff;
+    --accent-2: #2f7a72;
+    --shadow: 0 1px 0 rgba(16,32,28,0.05);
+    --radar-line: rgba(16,32,28,0.14);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #0b1614;
+      --surface: #101f1c;
+      --surface-2: #1b2e29;
+      --line: #294139;
+      --text: #e9f1ec;
+      --text-muted: #93a8a0;
+      --accent: #e2984f;
+      --accent-ink: #10201c;
+      --accent-2: #5fc9bd;
+      --shadow: 0 1px 0 rgba(0,0,0,0.4);
+      --radar-line: rgba(233,241,236,0.14);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #0b1614;
+    --surface: #101f1c;
+    --surface-2: #1b2e29;
+    --line: #294139;
+    --text: #e9f1ec;
+    --text-muted: #93a8a0;
+    --accent: #e2984f;
+    --accent-ink: #10201c;
+    --accent-2: #5fc9bd;
+    --shadow: 0 1px 0 rgba(0,0,0,0.4);
+    --radar-line: rgba(233,241,236,0.14);
+  }
+
+  *{box-sizing:border-box;}
+  ::selection{ background: var(--accent); color: var(--accent-ink); }
+
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a{ color: inherit; }
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .mono{
+    font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .display{
+    font-family: "Big Shoulders Display", "Arial Narrow", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+  }
+
+  .wrap{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 48px);
+  }
+
+  h1,h2,h3{ text-wrap: balance; margin: 0; }
+  p{ text-wrap: pretty; }
+
+  /* ============ Top bar ============ */
+  .topbar{
+    position: sticky; top:0; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width: 980px; margin:0 auto; padding: 14px clamp(20px,5vw,48px);
+    display:flex; align-items:center; justify-content: space-between;
+    gap: 16px;
+  }
+  .topbar .mark{
+    font-family:"Big Shoulders Display", sans-serif;
+    font-weight: 700; font-size: 20px; letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .topbar .mark .dot{ color: var(--accent); }
+  .topbar nav{ display:flex; gap: clamp(12px,3vw,28px); }
+  .topbar nav a{
+    font-family:"IBM Plex Mono", monospace;
+    font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase;
+    text-decoration:none; color: var(--text-muted);
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .topbar nav a:hover{ color: var(--text); border-color: var(--accent); }
+  @media (max-width: 560px){ .topbar nav a:nth-child(4){ display:none; } }
+  @media (max-width: 460px){ .topbar nav a:nth-child(3){ display:none; } }
+
+  /* ============ Hero ============ */
+  .hero{
+    padding: clamp(40px,7vw,88px) 0 clamp(28px,5vw,56px);
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1fr auto;
+    gap: clamp(24px, 5vw, 56px);
+    align-items: center;
+  }
+  .eyebrow{
+    font-family:"IBM Plex Mono", monospace;
+    font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent-2);
+    display:flex; align-items:center; gap: 10px;
+    margin-bottom: 18px;
+  }
+  .eyebrow::before{
+    content:""; width:7px; height:7px; border-radius:50%;
+    background: var(--accent-2);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-2) 20%, transparent);
+  }
+  .hero h1{
+    font-family:"Big Shoulders Display", sans-serif;
+    font-weight: 800;
+    font-size: clamp(46px, 9vw, 92px);
+    line-height: 0.92;
+    letter-spacing: 0.005em;
+  }
+  .hero .role{
+    margin-top: 14px;
+    font-family:"Source Serif 4", serif;
+    font-style: italic;
+    font-size: clamp(18px, 2.4vw, 23px);
+    color: var(--text-muted);
+    max-width: 46ch;
+  }
+  .telemetry{
+    margin-top: 26px;
+    display:flex; flex-wrap:wrap; gap: 10px 22px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size: 12.5px; color: var(--text-muted);
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  .telemetry b{ color: var(--text); font-weight: 500; }
+
+  .radar-box{
+    width: clamp(140px, 22vw, 220px);
+    aspect-ratio: 1;
+    justify-self: center;
+  }
+  canvas#radar{ width:100%; height:100%; display:block; }
+
+  /* ============ Section shell ============ */
+  section{ padding: clamp(40px,6vw,72px) 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type{ border-bottom: none; }
+  .section-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    gap: 16px; margin-bottom: clamp(24px,4vw,40px);
+    flex-wrap: wrap;
+  }
+  .section-head h2{
+    font-family:"Big Shoulders Display", sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 4vw, 38px);
+    letter-spacing: 0.01em;
+  }
+  .section-tag{
+    font-family:"IBM Plex Mono", monospace;
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .lede{
+    max-width: 62ch;
+    color: var(--text-muted);
+    font-size: 17px;
+  }
+
+  /* ============ Summary / transmission ============ */
+  .transmission{
+    display:grid;
+    grid-template-columns: 130px 1fr;
+    gap: clamp(16px,4vw,40px);
+  }
+  @media (max-width: 640px){ .transmission{ grid-template-columns: 1fr; } }
+  .transmission .label{
+    font-family:"IBM Plex Mono", monospace;
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent-2);
+    padding-top: 4px;
+  }
+  .transmission p{
+    font-size: clamp(18px, 2.2vw, 21px);
+    line-height: 1.65;
+  }
+  .transmission p + p{ margin-top: 1em; }
+
+  /* ============ Experience log ============ */
+  .log-entry{
+    display:grid;
+    grid-template-columns: 150px 1fr;
+    gap: clamp(14px,4vw,32px);
+    padding: 26px 0;
+    border-top: 1px solid var(--line);
+  }
+  .log-entry:first-child{ border-top: none; padding-top: 0; }
+  @media (max-width: 640px){ .log-entry{ grid-template-columns: 1fr; gap: 8px; } }
+  .log-date{
+    font-family:"IBM Plex Mono", monospace;
+    font-size: 12.5px; color: var(--text-muted); letter-spacing:0.02em;
+    padding-top: 3px;
+  }
+  .log-entry h3{
+    font-family:"Big Shoulders Display", sans-serif;
+    font-weight: 700; font-size: 23px; letter-spacing: 0.01em;
+  }
+  .log-org{
+    font-family:"IBM Plex Mono", monospace;
+    font-size: 12.5px; color: var(--accent-2);
+    margin-top: 3px;
+  }
+  .log-entry ul{ margin: 14px 0 0; padding-left: 1.1em; }
+  .log-entry li{ margin: 7px 0; color: var(--text); }
+  .log-entry li::marker{ color: var(--accent); }
+
+  /* ============ Project cards ============ */
+  .cards{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  @media (max-width: 680px){ .cards{ grid-template-columns: 1fr; } }
+  .card{
+    background: var(--surface);
+    padding: clamp(20px,3vw,30px);
+    display:flex; flex-direction:column; gap: 12px;
+  }
+  .card .code{
+    font-family:"IBM Plex Mono", monospace;
+    font-size: 12px; letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+  .card h3{
+    font-family:"Big Shoulders Display", sans-serif;
+    font-weight: 700; font-size: 25px;
+  }
+  .card p{ color: var(--text-muted); font-size: 15.5px; margin:0; }
+  .chiprow{ display:flex; flex-wrap:wrap; gap: 8px; margin-top: 4px; }
+  .chip{
+    font-family:"IBM Plex Mono", monospace;
+    font-size: 11.5px; letter-spacing: 0.03em;
+    color: var(--text-muted);
+    border: 1px solid var(--line);
+    padding: 3px 9px;
+    border-radius: 3px;
+  }
+
+  /* ============ Skills readout ============ */
+  .skill-grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px 40px;
+  }
+  @media (max-width: 640px){ .skill-grid{ grid-template-columns: 1fr; } }
+  .skill-group .label{
+    font-family:"IBM Plex Mono", monospace;
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent-2);
+    margin-bottom: 12px;
+    display:block;
+  }
+  .skill-chips{ display:flex; flex-wrap:wrap; gap: 8px; }
+  .skill-chip{
+    font-family:"IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 5px 11px;
+    border-radius: 3px;
+  }
+  .status-line{
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-family:"IBM Plex Mono", monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+    display:flex; flex-wrap:wrap; gap: 8px 24px;
+  }
+  .status-line b{ color: var(--accent-2); font-weight:500; }
+
+  /* ============ Education ============ */
+  .edu-entry{
+    display:grid;
+    grid-template-columns: 150px 1fr;
+    gap: clamp(14px,4vw,32px);
+    padding: 20px 0;
+    border-top: 1px solid var(--line);
+  }
+  .edu-entry:first-child{ border-top:none; padding-top:0; }
+  @media (max-width: 640px){ .edu-entry{ grid-template-columns: 1fr; gap:6px; } }
+  .edu-entry h3{
+    font-family:"Big Shoulders Display", sans-serif;
+    font-weight: 700; font-size: 22px;
+  }
+  .edu-entry .deg{ color: var(--text-muted); font-size: 15.5px; margin-top: 4px; }
+
+  /* ============ Field record (activities) ============ */
+  .record-list{ display:flex; flex-direction:column; }
+  .record-row{
+    display:grid;
+    grid-template-columns: 150px 1fr;
+    gap: clamp(14px,4vw,32px);
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    font-size: 15.5px;
+  }
+  .record-row:first-child{ border-top:none; padding-top:0; }
+  @media (max-width: 640px){ .record-row{ grid-template-columns: 1fr; gap:4px; } }
+  .record-row .who{ color: var(--text); }
+  .record-row .who b{ font-weight:600; }
+  .record-row .what{ color: var(--text-muted); }
+
+  /* ============ Contact / footer ============ */
+  footer{ padding: clamp(48px,7vw,88px) 0 clamp(32px,5vw,56px); }
+  .transmit h2{
+    font-family:"Big Shoulders Display", sans-serif;
+    font-weight: 800;
+    font-size: clamp(34px, 6vw, 56px);
+    max-width: 14ch;
+  }
+  .transmit .lede{ margin-top: 14px; }
+  .channels{
+    margin-top: clamp(28px,4vw,40px);
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .channel{
+    background: var(--surface);
+    padding: 20px 22px;
+    text-decoration:none;
+    color: var(--text);
+    display:flex; flex-direction:column; gap:6px;
+    transition: background .15s ease;
+  }
+  .channel:hover{ background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+  .channel .k{
+    font-family:"IBM Plex Mono", monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent-2);
+  }
+  .channel .v{ font-family:"IBM Plex Mono", monospace; font-size: 15px; }
+  .foot-meta{
+    margin-top: 40px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap: 8px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size: 11.5px; color: var(--text-muted);
+    letter-spacing: 0.03em;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="mark">MCMILLAN<span class="dot">.</span></div>
+    <nav>
+      <a href="#log">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#systems">Skills</a>
+      <a href="#education">Education</a>
+      <a href="#transmit">Contact</a>
+    </nav>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Active clearance &middot; open to roles</div>
+      <h1>Samuel<br>McMillan</h1>
+      <p class="role">AI/ML engineer building and shipping deep-learning systems in mission-critical environments &mdash; now studying the leadership side at Carnegie Mellon.</p>
+      <div class="telemetry">
+        <span><b>Based</b> &nbsp;Hill AFB, Utah</span>
+        <span><b>Focus</b> &nbsp;PyTorch / CUDA / Full-Stack</span>
+        <span><b>Languages</b> &nbsp;English, Mandarin (fluent)</span>
+      </div>
+    </div>
+    <div class="radar-box"><canvas id="radar"></canvas></div>
+  </div>
+</header>
+
+<section id="summary">
+  <div class="wrap">
+    <div class="transmission">
+      <div class="label">Summary</div>
+      <div>
+        <p>I'm an AI/ML practitioner and systems leader with production experience building and deploying machine learning in mission-critical DoD environments &mdash; deep learning engineering in PyTorch and CUDA, paired with full-stack product development and a track record of leading cross-functional teams.</p>
+        <p>I'm currently pursuing an M.S. in AI Systems Management at Carnegie Mellon University, aimed at roles that sit at the intersection of technical AI work and organizational leadership.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="log">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Experience</h2>
+      <span class="section-tag">2022 &ndash; present</span>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date mono">MAY 2024 &ndash; PRESENT</div>
+      <div>
+        <h3>Computer Scientist</h3>
+        <div class="log-org">Hill Air Force Base &middot; Hill AFB, UT</div>
+        <ul>
+          <li>Owned end-to-end development and deployment of production ML systems in a mission-critical DoD environment; authored Python automation tooling adopted by 15 teammates, saving 740 hours of allocated time.</li>
+          <li>Trained a PyTorch/CUDA image recognition model from scratch to detect illegal fishing vessels at approximately 80% accuracy, deployed on-board low-power satellites with a radio relay transmitting real-time recognition results back to ground.</li>
+          <li>Led full-stack web application development with a React front end, RESTful API backend, and integrated database, containerized with Docker for reliable, repeatable deployment.</li>
+          <li>Engineered in-house AI-powered tools without third-party dependencies, including full game prototypes combining ML inference with custom game logic.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date mono">MAY 2023 &ndash; AUG 2023</div>
+      <div>
+        <h3>Assistant Coordinator, Consultant &amp; Team Leader</h3>
+        <div class="log-org">FSY Program</div>
+        <ul>
+          <li>Directed teams of approximately 9 leaders and 50+ counselors delivering programs for 500+ weekly attendees; drove data-informed logistics improvements.</li>
+          <li>Delivered training workshops and stakeholder presentations; cultivated cross-functional leadership across large, dynamic teams.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date mono">AUG 2022</div>
+      <div>
+        <h3>IT Support Specialist</h3>
+        <div class="log-org">Learn Fountain &middot; South Jordan, UT</div>
+        <ul>
+          <li>Built software solutions for large-scale data processing; collaborated with the team to troubleshoot and optimize IT infrastructure.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Projects</h2>
+      <span class="section-tag">selected builds</span>
+    </div>
+    <p class="lede" style="margin-bottom:32px;">Systems built and shipped on the job at Hill Air Force Base, spanning computer vision, deployment infrastructure, and applied tooling.</p>
+
+    <div class="cards">
+      <div class="card">
+        <span class="code">PROJECT / VESSEL-VISION</span>
+        <h3>Satellite Vessel Detection</h3>
+        <p>A PyTorch/CUDA image recognition model trained from scratch to identify illegal fishing vessels at roughly 80% accuracy, deployed on-board low-power satellites and relaying real-time detections back to ground over radio link.</p>
+        <div class="chiprow"><span class="chip">PyTorch</span><span class="chip">CUDA</span><span class="chip">Computer Vision</span><span class="chip">Edge Deployment</span></div>
+      </div>
+      <div class="card">
+        <span class="code">PROJECT / AUTOMATE-15</span>
+        <h3>Team Automation Tooling</h3>
+        <p>Python automation utilities built to remove repetitive manual work from a DoD engineering workflow, adopted by 15 teammates and measured at 740 hours of allocated time saved.</p>
+        <div class="chiprow"><span class="chip">Python</span><span class="chip">Automation</span><span class="chip">Internal Tools</span></div>
+      </div>
+      <div class="card">
+        <span class="code">PROJECT / STACK-01</span>
+        <h3>Full-Stack Mission App</h3>
+        <p>End-to-end web application with a React front end and a RESTful API backend over an integrated database, containerized with Docker for reliable, repeatable deployment.</p>
+        <div class="chiprow"><span class="chip">React</span><span class="chip">REST API</span><span class="chip">Docker</span><span class="chip">Databases</span></div>
+      </div>
+      <div class="card">
+        <span class="code">PROJECT / INFERENCE-PLAY</span>
+        <h3>AI-Powered Game Prototypes</h3>
+        <p>In-house tools built without third-party ML dependencies, including full game prototypes that combine live model inference with custom game logic.</p>
+        <div class="chiprow"><span class="chip">ML Inference</span><span class="chip">Game Logic</span><span class="chip">No 3rd-Party Deps</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="systems">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Skills</h2>
+      <span class="section-tag">systems &amp; languages</span>
+    </div>
+    <div class="skill-grid">
+      <div class="skill-group">
+        <span class="label">AI &amp; Machine Learning</span>
+        <div class="skill-chips">
+          <span class="skill-chip">PyTorch</span><span class="skill-chip">CUDA</span><span class="skill-chip">Deep Learning</span><span class="skill-chip">Generative AI</span><span class="skill-chip">Automation</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="label">Programming Languages</span>
+        <div class="skill-chips">
+          <span class="skill-chip">Python</span><span class="skill-chip">Java</span><span class="skill-chip">C++</span><span class="skill-chip">TypeScript</span><span class="skill-chip">JavaScript</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="label">Full-Stack &amp; Web</span>
+        <div class="skill-chips">
+          <span class="skill-chip">React</span><span class="skill-chip">REST APIs</span><span class="skill-chip">Docker</span><span class="skill-chip">Microservices</span><span class="skill-chip">Databases</span><span class="skill-chip">HTML/CSS</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="label">Human Languages</span>
+        <div class="skill-chips">
+          <span class="skill-chip">English &mdash; Native</span><span class="skill-chip">Mandarin Chinese &mdash; Fluent</span>
+        </div>
+      </div>
+    </div>
+    <div class="status-line mono">
+      <span><b>Clearance:</b> Active U.S. Security Clearance</span>
+      <span><b>Availability:</b> Open to conversations</span>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Education</h2>
+      <span class="section-tag">2020 &ndash; 2027</span>
+    </div>
+    <div class="edu-entry">
+      <div class="log-date mono">2026 &ndash; 2027</div>
+      <div>
+        <h3>Carnegie Mellon University</h3>
+        <div class="deg">M.S. AI Systems Management &middot; 12-month accelerated program &middot; Pittsburgh, PA &middot; expected Fall 2027</div>
+      </div>
+    </div>
+    <div class="edu-entry">
+      <div class="log-date mono">&ndash; MAY 2025</div>
+      <div>
+        <h3>Utah State University</h3>
+        <div class="deg">B.S. Computer Science &middot; B.A. Chinese &middot; Logan, UT &middot; Merit scholar, tens of thousands in academic awards</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="record">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Field Record</h2>
+      <span class="section-tag">leadership &amp; activities</span>
+    </div>
+    <div class="record-list">
+      <div class="record-row">
+        <div class="who mono"><b>Utah State University</b></div>
+        <div class="what">Chinese Teaching Assistant, 2 semesters &mdash; co-instructed Mandarin coursework, led tutoring sessions, reviewed student performance benchmarks with faculty.</div>
+      </div>
+      <div class="record-row">
+        <div class="who mono"><b>Church of Jesus Christ of Latter-day Saints</b></div>
+        <div class="what">Technology and Outreach Volunteer, 2017&ndash;2019 &mdash; 80+ hour weeks of community training and outreach, conducted in Mandarin.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="transmit">
+  <div class="wrap">
+    <div class="transmit">
+      <h2>Let's talk.</h2>
+      <p class="lede">Open to roles at the intersection of applied AI and systems leadership &mdash; reach out by whichever channel is easiest.</p>
+    </div>
+    <div class="channels">
+      <a class="channel" href="mailto:notmyrealemail@gmail.com">
+        <span class="k">Email</span>
+        <span class="v">notmyrealemail@gmail.com</span>
+      </a>
+      <a class="channel" href="tel:+18014009534">
+        <span class="k">Phone</span>
+        <span class="v">(801) 400-9534</span>
+      </a>
+      <a class="channel" href="https://linkedin.com/in/samuel-mcmillan-147a27288" target="_blank" rel="noopener noreferrer">
+        <span class="k">LinkedIn</span>
+        <span class="v">/in/samuel-mcmillan-147a27288</span>
+      </a>
+    </div>
+    <div class="foot-meta">
+      <span>&copy; 2026 Samuel Jacob McMillan</span>
+      <span>Hill AFB, UT &middot; Pittsburgh, PA (2026)</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var canvas = document.getElementById('radar');
+  var ctx = canvas.getContext('2d');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  function getInk(){
+    var v = getComputedStyle(document.documentElement).getPropertyValue('--text').trim();
+    return v || '#10201c';
+  }
+  function getAccent(){
+    var v = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    return v || '#b25e28';
+  }
+  function getAccent2(){
+    var v = getComputedStyle(document.documentElement).getPropertyValue('--accent-2').trim();
+    return v || '#2f7a72';
+  }
+  function getLine(){
+    var v = getComputedStyle(document.documentElement).getPropertyValue('--radar-line').trim();
+    return v || 'rgba(16,32,28,0.14)';
+  }
+
+  function resize(){
+    var rect = canvas.getBoundingClientRect();
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  var t = 0;
+  var vesselAngle = 2.1; // fixed position of the "detected" blip
+
+  function draw(){
+    var w = canvas.width, h = canvas.height;
+    var cx = w/2, cy = h/2;
+    var r = Math.min(w,h) * 0.42;
+
+    ctx.clearRect(0,0,w,h);
+
+    // orbit rings
+    ctx.strokeStyle = getLine();
+    ctx.lineWidth = Math.max(1, dpr);
+    [1, 0.68, 0.36].forEach(function(f){
+      ctx.beginPath();
+      ctx.arc(cx, cy, r*f, 0, Math.PI*2);
+      ctx.stroke();
+    });
+
+    // crosshair
+    ctx.beginPath();
+    ctx.moveTo(cx - r, cy); ctx.lineTo(cx + r, cy);
+    ctx.moveTo(cx, cy - r); ctx.lineTo(cx, cy + r);
+    ctx.stroke();
+
+    // sweep
+    var sweepAngle = t;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(sweepAngle);
+    var sweepGrad = ctx.createLinearGradient(0,0,r,0);
+    var accentColor = getAccent2();
+    sweepGrad.addColorStop(0, hexToRgba(accentColor, 0.55));
+    sweepGrad.addColorStop(1, hexToRgba(accentColor, 0));
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.arc(0,0,r, -0.5, 0.02);
+    ctx.closePath();
+    ctx.fillStyle = sweepGrad;
+    ctx.fill();
+    ctx.restore();
+
+    // orbiting satellite dot
+    var satAngle = t * 1.15;
+    var sx = cx + Math.cos(satAngle) * r * 0.68;
+    var sy = cy + Math.sin(satAngle) * r * 0.68;
+    ctx.beginPath();
+    ctx.arc(sx, sy, 3*dpr, 0, Math.PI*2);
+    ctx.fillStyle = getAccent2();
+    ctx.fill();
+
+    // detected vessel blip (fixed) with pulse
+    var vx = cx + Math.cos(vesselAngle) * r * 0.36;
+    var vy = cy + Math.sin(vesselAngle) * r * 0.36;
+    var pulse = (Math.sin(t*2.4) + 1) / 2;
+    ctx.beginPath();
+    ctx.arc(vx, vy, (3 + pulse*5)*dpr, 0, Math.PI*2);
+    ctx.strokeStyle = hexToRgba(getAccent(), 0.5 - pulse*0.35);
+    ctx.lineWidth = Math.max(1, dpr);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(vx, vy, 2.5*dpr, 0, Math.PI*2);
+    ctx.fillStyle = getAccent();
+    ctx.fill();
+
+    // center dot
+    ctx.beginPath();
+    ctx.arc(cx, cy, 2*dpr, 0, Math.PI*2);
+    ctx.fillStyle = getInk();
+    ctx.fill();
+  }
+
+  function hexToRgba(hex, alpha){
+    hex = hex.replace('#','').trim();
+    if(hex.length === 3){
+      hex = hex.split('').map(function(c){return c+c;}).join('');
+    }
+    var num = parseInt(hex, 16);
+    if(isNaN(num)) return 'rgba(178,94,40,' + alpha + ')';
+    var r = (num >> 16) & 255, g = (num >> 8) & 255, b = num & 255;
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+  }
+
+  function loop(){
+    t += 0.008;
+    draw();
+    if(!reduced) requestAnimationFrame(loop);
+  }
+
+  if(reduced){
+    draw();
+  } else {
+    requestAnimationFrame(loop);
+  }
+})();
+</script>
+</body>
+</html>
