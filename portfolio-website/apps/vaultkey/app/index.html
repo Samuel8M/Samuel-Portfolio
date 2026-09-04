@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VaultKey Demo</title>
+<!--
+  No CDN dependencies anywhere in this app: no Google Fonts <link>, no
+  <script src="https://...">. Only system font stacks + the browser's
+  native crypto.subtle / crypto.getRandomValues (see js/crypto.js for the
+  full write-up on why crypto.subtle is used instead of a hand-rolled
+  crypto port, and on the file:// secure-context caveat).
+-->
+<style>
+  :root{ --bg:#edf1ee; --surface:#ffffff; --line:#cdd7d1; --text:#10201c; --text-muted:#4e5f59; --accent:#b25e28; --accent-2:#2f7a72; --danger:#a8402f; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#0b1614; --surface:#101f1c; --line:#294139; --text:#e9f1ec; --text-muted:#93a8a0; --accent:#e2984f; --accent-2:#5fc9bd; --danger:#e2694f; } }
+  :root[data-theme="dark"]{ --bg:#0b1614; --surface:#101f1c; --line:#294139; --text:#e9f1ec; --text-muted:#93a8a0; --accent:#e2984f; --accent-2:#5fc9bd; --danger:#e2694f; }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; min-height:100%; background:var(--bg); }
+  body{
+    color:var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding: 28px 16px 64px;
+  }
+  .mono{ font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, "Liberation Mono", monospace; }
+
+  .wrap{ max-width: 720px; margin: 0 auto; }
+
+  header.app-header{ margin-bottom: 22px; }
+  header.app-header h1{
+    font-weight: 800; letter-spacing:.01em; font-size: 28px; margin: 0 0 6px;
+  }
+  header.app-header p{ margin:0; color:var(--text-muted); font-size:14px; line-height:1.5; }
+
+  .panel{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 18px;
+  }
+
+  h2{ font-size: 16px; margin: 0 0 4px; font-weight: 700; }
+  .subtitle{ color: var(--text-muted); font-size: 13px; margin: 0 0 18px; line-height:1.5; }
+
+  label{ display:block; font-size: 12px; text-transform: uppercase; letter-spacing:.06em; color: var(--text-muted); margin-bottom: 6px; }
+  input[type="password"], input[type="text"]{
+    width:100%;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  input.mono{ font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, "Liberation Mono", monospace; }
+  input:focus{ outline: 2px solid var(--accent-2); outline-offset: 1px; }
+
+  .field{ margin-bottom: 14px; }
+
+  button{
+    font-family: inherit;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--text);
+    padding: 10px 16px;
+    cursor: pointer;
+  }
+  button:hover{ border-color: var(--accent-2); }
+  button:disabled{ opacity:.55; cursor:default; }
+  button.primary{
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+  button.primary:hover{ filter: brightness(1.06); }
+  button.ghost{
+    background: transparent;
+    padding: 6px 10px;
+    font-size: 12.5px;
+  }
+  button.danger, button.ghost.danger{ color: var(--danger); border-color: var(--danger); }
+
+  .row{ display:flex; gap:10px; align-items:center; }
+  .row.end{ justify-content:flex-end; }
+
+  .banner{
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    margin-bottom: 14px;
+    line-height:1.5;
+  }
+  .banner.error{
+    background: var(--surface);
+    background: color-mix(in srgb, var(--danger) 14%, var(--surface));
+    border: 1px solid var(--danger);
+    color: var(--danger);
+  }
+  .banner.hint{
+    background: var(--surface);
+    background: color-mix(in srgb, var(--accent-2) 12%, var(--surface));
+    border: 1px solid var(--accent-2);
+    color: var(--text);
+  }
+
+  a.link{ color: var(--accent-2); font-size: 13px; }
+  a.link:hover{ color: var(--accent); }
+
+  .meta-grid{ display:grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 12.5px; color: var(--text-muted); }
+  .meta-grid .val{ color: var(--text); word-break: break-all; }
+
+  ul#entry-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .entry{
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    background: var(--bg);
+  }
+  .entry-main{ display:flex; justify-content:space-between; align-items:baseline; gap: 12px; flex-wrap:wrap; }
+  .entry-label{ font-weight:600; }
+  .entry-cipher{
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, "Liberation Mono", monospace;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    overflow-wrap: anywhere;
+  }
+  .entry-secret{
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: var(--surface);
+    border: 1px dashed var(--line);
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, "Liberation Mono", monospace;
+    font-size: 13px;
+    word-break: break-all;
+  }
+  .entry-secret.error{ color: var(--danger); border-color: var(--danger); }
+  .entry-actions{ margin-top: 8px; display:flex; gap: 8px; }
+
+  #empty-state{ color: var(--text-muted); font-size: 13px; padding: 6px 2px; }
+
+  footer.app-footer{ margin-top: 26px; color: var(--text-muted); font-size: 12px; line-height:1.6; }
+  footer.app-footer code{
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, "Liberation Mono", monospace;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 5px;
+  }
+
+  #subtle-unavailable{
+    max-width: 620px;
+    margin: 60px auto;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+  <!--
+    If crypto.subtle is unavailable (see the secure-context note in
+    js/crypto.js), app.js hides #app-root and shows this instead of
+    letting every crypto call throw silently.
+  -->
+  <div id="subtle-unavailable" class="panel" hidden>
+    <h2>This demo needs the Web Crypto API</h2>
+    <p class="subtitle">
+      <code class="mono">window.crypto.subtle</code> is not available in this page right now.
+      Browsers only expose it in a "secure context" -- https(s) pages always qualify,
+      and Chromium/Firefox usually also allow it for a page opened directly from
+      <code class="mono">file://</code>, but that is not guaranteed by every browser or
+      configuration. Try opening this demo through the portfolio site's real hosting
+      (or any local <code class="mono">http://</code> server) instead of double-clicking
+      the file directly.
+    </p>
+  </div>
+
+  <div id="app-root" hidden>
+    <div class="wrap">
+      <header class="app-header">
+        <h1>VaultKey</h1>
+        <p>
+          Encrypted password manager demo &mdash; AES-256-GCM with a per-vault PBKDF2-derived key,
+          running entirely in this tab via the browser's native <code class="mono">crypto.subtle</code>.
+          Nothing here is sent to a server.
+        </p>
+      </header>
+
+      <!-- ===================== Lock / auth screen ===================== -->
+      <section id="lock-screen" class="panel">
+        <h2 id="auth-title">Create a new vault</h2>
+        <p class="subtitle" id="auth-subtitle"></p>
+
+        <div class="banner error" id="auth-error" hidden></div>
+        <div class="banner hint" id="wrong-password-hint" hidden>
+          Tip: try entering the <strong>wrong</strong> password on purpose. PBKDF2 will happily derive
+          <em>a</em> key from it &mdash; but AES-GCM's authentication tag check will then fail when
+          decrypting the vault's verifier blob, and you'll see the authenticated-failure error below
+          instead of silently-wrong data.
+        </div>
+
+        <form id="auth-form">
+          <div class="field">
+            <label for="auth-password">Master password</label>
+            <input type="password" id="auth-password" autocomplete="off" required />
+          </div>
+          <div class="field" id="auth-confirm-row">
+            <label for="auth-confirm">Confirm master password</label>
+            <input type="password" id="auth-confirm" autocomplete="off" />
+          </div>
+          <div class="row end">
+            <a href="#" class="link" id="reset-link" hidden>Reset demo vault&hellip;</a>
+            <span style="flex:1"></span>
+            <button type="submit" class="primary" id="auth-submit">Create vault</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ===================== Unlocked vault screen ===================== -->
+      <section id="vault-screen" hidden>
+        <div class="panel">
+          <div class="row" style="justify-content:space-between;">
+            <h2 style="margin:0;">Vault unlocked</h2>
+            <button type="button" id="lock-btn">Lock vault</button>
+          </div>
+          <div class="meta-grid" style="margin-top:12px;">
+            <span>Salt (hex)</span><span class="val mono" id="salt-display">&mdash;</span>
+            <span>KDF</span><span class="val mono" id="kdf-display">&mdash;</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Add entry</h2>
+          <p class="subtitle">Label stays visible; the value is AES-GCM encrypted with a fresh random IV before it's stored.</p>
+          <div class="banner error" id="add-error" hidden></div>
+          <form id="add-form">
+            <div class="field">
+              <label for="add-label">Label</label>
+              <input type="text" id="add-label" placeholder="github.com" required />
+            </div>
+            <div class="field">
+              <label for="add-secret">Secret value</label>
+              <input type="text" class="mono" id="add-secret" placeholder="whatever you want to encrypt" required />
+            </div>
+            <div class="row end">
+              <button type="submit" class="primary">Encrypt &amp; store</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <h2>Entries</h2>
+          <p class="subtitle">Only labels and ciphertext are ever stored. Decryption happens on demand, in memory.</p>
+          <p id="empty-state">No entries yet &mdash; add one above.</p>
+          <ul id="entry-list"></ul>
+        </div>
+      </section>
+
+      <footer class="app-footer">
+        <p>
+          Vanilla HTML/CSS/JS, no build step, no crypto library &mdash; only
+          <code>crypto.subtle</code> and <code>crypto.getRandomValues</code>. Ciphertext (never the
+          password or derived key) is optionally kept in this browser's <code>localStorage</code> so
+          entries survive a reload; see <code>js/vault.js</code> and <code>js/crypto.js</code> for the
+          full implementation and parity notes against the real Python CLI at
+          <code>VaultKey-Security/vaultkey/crypto.py</code>.
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="js/crypto.js"></script>
+  <script src="js/vault.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

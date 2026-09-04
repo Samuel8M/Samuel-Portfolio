@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoverSim — Differential-Drive Robot Simulator</title>
+<meta name="description" content="A 2D differential-drive robot simulator: PID waypoint control and ray-cast range sensors, running as a live canvas simulation.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="app-header">
+      <h1>RoverSim</h1>
+      <p class="subtitle">
+        A differential-drive robot drives a waypoint route under real-time PID heading control,
+        reading its surroundings with five ray-cast range sensors. The physics, PID loop, and
+        ray-casting below are a line-for-line port of the original Python simulator &mdash; every
+        frame is actually simulated, not pre-baked.
+      </p>
+    </header>
+
+    <main class="layout">
+      <section class="canvas-panel" aria-label="Simulation canvas">
+        <canvas id="sim-canvas" aria-label="RoverSim world"></canvas>
+        <div class="canvas-footer">
+          <span>Click inside the arena to send the rover to a new waypoint.</span>
+          <span id="status-note" class="idle">idle</span>
+        </div>
+      </section>
+
+      <aside class="controls" aria-label="Controls and telemetry">
+        <div class="control-group buttons">
+          <button id="pause-btn" class="primary" type="button">Pause</button>
+          <button id="restart-btn" type="button">Restart</button>
+        </div>
+
+        <div class="control-group">
+          <h2>Pose</h2>
+          <div class="telemetry">
+            <div class="row"><span class="label">x (m)</span><span class="value" id="tm-x">0.00</span></div>
+            <div class="row"><span class="label">y (m)</span><span class="value" id="tm-y">0.00</span></div>
+            <div class="row"><span class="label">heading</span><span class="value" id="tm-theta">0&deg;</span></div>
+            <div class="row"><span class="label">sim time</span><span class="value" id="tm-t">0.00s</span></div>
+            <div class="row"><span class="label">v</span><span class="value" id="tm-v">0.00 m/s</span></div>
+            <div class="row"><span class="label">&omega;</span><span class="value" id="tm-omega">0.00 rad/s</span></div>
+            <div class="row full"><span class="label">waypoint</span><span class="value" id="tm-waypoint">1 / 5</span></div>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <h2>Range sensors</h2>
+          <div class="sensor-list" id="sensor-list"></div>
+        </div>
+
+        <div class="warning-banner" id="warning-banner">&#9650; obstacle within warning range</div>
+
+        <div class="control-group">
+          <p class="field-note">
+            <strong>PID:</strong> kp=2.5 ki=0.05 kd=0.4 (angular, wrapped error) drives heading
+            toward the bearing to the current waypoint. <strong>Sensors:</strong> 5 rays at
+            &plusmn;90&deg;, &plusmn;45&deg;, 0&deg; from heading, ray-cast against the circle/rectangle
+            obstacles below.
+          </p>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="app-footer">
+      <p>
+        Vanilla JS + HTML5 Canvas, no build step. Ported from a Python differential-drive
+        simulator &mdash; see <code>js/kinematics.js</code>, <code>js/pid.js</code>,
+        <code>js/sensors.js</code>, <code>js/world.js</code> and <code>js/sim.js</code>.
+      </p>
+    </footer>
+  </div>
+
+  <script src="js/kinematics.js"></script>
+  <script src="js/pid.js"></script>
+  <script src="js/world.js"></script>
+  <script src="js/sensors.js"></script>
+  <script src="js/sim.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
