@@ -1,0 +1,11 @@
+data/
+*.zarr/
+models/*.pt
+models/*.pth
+models/*.zip
+submissions/*.csv
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+kaggle.json

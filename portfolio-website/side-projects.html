@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Side projects by Samuel McMillan — one working, live demo per domain of software engineering.">
+<title>Side Projects — Samuel McMillan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+  :root{
+    --bg: #edf1ee;
+    --surface: #ffffff;
+    --line: #cdd7d1;
+    --text: #10201c;
+    --text-muted: #4e5f59;
+    --accent: #b25e28;
+    --accent-ink: #ffffff;
+    --accent-2: #2f7a72;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #0b1614; --surface: #101f1c; --line: #294139; --text: #e9f1ec;
+      --text-muted: #93a8a0; --accent: #e2984f; --accent-ink: #10201c; --accent-2: #5fc9bd;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #0b1614; --surface: #101f1c; --line: #294139; --text: #e9f1ec;
+    --text-muted: #93a8a0; --accent: #e2984f; --accent-ink: #10201c; --accent-2: #5fc9bd;
+  }
+
+  *{box-sizing:border-box;}
+  ::selection{ background: var(--accent); color: var(--accent-ink); }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background: var(--bg); color: var(--text);
+    font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+    font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  a{ color: inherit; }
+  a:focus-visible, button:focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; }
+  .mono{ font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+  h1,h2,h3{ text-wrap: balance; margin: 0; }
+  p{ text-wrap: pretty; }
+  .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
+
+  .topbar{
+    position: sticky; top:0; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(6px); border-bottom: 1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width: 1120px; margin:0 auto; padding: 14px clamp(20px,5vw,48px);
+    display:flex; align-items:center; justify-content: space-between; gap: 16px;
+  }
+  .topbar .mark{
+    font-family:"Big Shoulders Display", sans-serif; font-weight: 700; font-size: 20px;
+    letter-spacing: 0.04em; text-transform: uppercase; text-decoration:none;
+  }
+  .topbar .mark .dot{ color: var(--accent); }
+  .topbar nav a{
+    font-family:"IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; text-decoration:none; color: var(--text-muted);
+    border-bottom: 1px solid transparent; padding-bottom: 2px;
+  }
+  .topbar nav a:hover{ color: var(--text); border-color: var(--accent); }
+
+  .hero{ padding: clamp(40px,6vw,64px) 0 clamp(24px,4vw,40px); border-bottom: 1px solid var(--line); }
+  .eyebrow{
+    font-family:"IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent-2); display:flex; align-items:center; gap: 10px; margin-bottom: 18px;
+  }
+  .eyebrow::before{ content:""; width:7px; height:7px; border-radius:50%; background: var(--accent-2);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-2) 20%, transparent); }
+  .hero h1{
+    font-family:"Big Shoulders Display", sans-serif; font-weight: 800;
+    font-size: clamp(38px, 7vw, 64px); line-height: 0.95; letter-spacing: 0.005em;
+  }
+  .hero .lede{ margin-top: 14px; color: var(--text-muted); font-size: clamp(16px, 1.6vw, 19px); max-width: 62ch; }
+
+  main{ padding: clamp(32px,5vw,56px) 0 clamp(56px,8vw,96px); }
+  .grid{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    background: var(--line); border: 1px solid var(--line);
+  }
+  @media (max-width: 920px){ .grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px){ .grid{ grid-template-columns: 1fr; } }
+
+  .tile{ background: var(--surface); padding: clamp(20px,2.6vw,26px); display:flex; flex-direction:column; gap: 10px; }
+  .tile .cat{
+    font-family:"IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--accent-2);
+  }
+  .tile h3{ font-family:"Big Shoulders Display", sans-serif; font-weight: 700; font-size: 25px; }
+  .tile p{ color: var(--text-muted); font-size: 15px; margin: 0; flex: 1 0 auto; }
+  .chiprow{ display:flex; flex-wrap:wrap; gap: 7px; margin-top: 2px; }
+  .chip{
+    font-family:"IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.03em;
+    color: var(--text-muted); border: 1px solid var(--line); padding: 3px 8px; border-radius: 3px;
+  }
+  .launch{
+    margin-top: 8px; display:inline-flex; align-items:center; gap: 8px; align-self:flex-start;
+    font-family:"IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: 0.04em; text-transform: uppercase;
+    text-decoration:none; color: var(--accent-ink); background: var(--accent);
+    padding: 9px 14px; border-radius: 4px; transition: opacity .15s ease;
+  }
+  .launch:hover{ opacity: 0.85; }
+  .launch.ghost{
+    color: var(--text); background: transparent; border: 1px solid var(--line);
+  }
+  .launch.ghost:hover{ border-color: var(--accent); opacity: 1; color: var(--accent); }
+
+  footer{ padding: 32px 0 56px; border-top: 1px solid var(--line); }
+  footer p{ color: var(--text-muted); font-size: 14px; }
+  footer a{ color: var(--accent-2); text-decoration:none; }
+  footer a:hover{ text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="mark" href="index.html">MCMILLAN<span class="dot">.</span></a>
+    <nav><a href="index.html">&larr; Portfolio</a></nav>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Live in this browser &middot; no install required</div>
+    <h1>Side Projects</h1>
+    <p class="lede">One self-directed, fully working build per domain of the discipline &mdash; from pathfinding algorithms to a hand-rolled WebSocket server to an encrypted password vault. Every tile below opens a real, running instance of that project, not a screenshot.</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="grid">
+
+      <div class="tile">
+        <span class="cat mono">Web &amp; Internet</span>
+        <h3>SnapLinks</h3>
+        <p>Full-stack URL shortener with click analytics. This demo runs the same shortening/redirect/analytics logic entirely client-side, in your browser's local storage.</p>
+        <div class="chiprow"><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">SQLite</span></div>
+        <a class="launch" href="apps/snaplinks/index.html">Launch demo &rarr;</a>
+      </div>
+
+      <div class="tile">
+        <span class="cat mono">Mobile &amp; Cross-Platform</span>
+        <h3>PulseHabit</h3>
+        <p>Habit &amp; streak tracker built with Expo/React Native. The same streak-calculation logic, running here as a web build.</p>
+        <div class="chiprow"><span class="chip">React Native</span><span class="chip">Expo</span><span class="chip">TypeScript</span></div>
+        <a class="launch" href="apps/pulsehabit/index.html">Launch demo &rarr;</a>
+      </div>
+
+      <div class="tile">
+        <span class="cat mono">AI, ML &amp; Data</span>
+        <h3>CassavaLeaf</h3>
+        <p>Cassava leaf disease classifier trained two ways on 21k+ images &mdash; a fine-tuned Vision Transformer and YOLOv8. GPU training can't run in a browser, so this opens the pipeline and dataset instead of a fake demo.</p>
+        <div class="chiprow"><span class="chip">PyTorch</span><span class="chip">Computer Vision</span><span class="chip">YOLOv8</span></div>
+        <a class="launch ghost" href="apps/cassavaleaf/index.html">View pipeline &rarr;</a>
+      </div>
+
+      <div class="tile">
+        <span class="cat mono">Algorithms, Systems &amp; Theory</span>
+        <h3>PathFinder</h3>
+        <p>Pathfinding &amp; maze-generation visualizer &mdash; BFS, DFS, Dijkstra, and A* animated live on a grid you draw on.</p>
+        <div class="chiprow"><span class="chip">TypeScript</span><span class="chip">Canvas</span><span class="chip">Vite</span></div>
+        <a class="launch" href="apps/pathfinder/index.html">Launch demo &rarr;</a>
+      </div>
+
+      <div class="tile">
+        <span class="cat mono">Databases &amp; Storage</span>
+        <h3>MiniDB</h3>
+        <p>A persistent key-value engine built from scratch &mdash; append-only log, in-memory index, compaction &mdash; ported to run live in an in-browser terminal.</p>
+        <div class="chiprow"><span class="chip">Storage Engines</span><span class="chip">JavaScript</span></div>
+        <a class="launch" href="apps/minidb/index.html">Launch demo &rarr;</a>
+      </div>
+
+      <div class="tile">
+        <span class="cat mono">Developer Tools &amp; Infrastructure</span>
+        <h3>DevLive</h3>
+        <p>A live-reload dev server with a hand-rolled WebSocket implementation. This demo runs the real handshake and frame codec live against a simulated file change.</p>
+        <div class="chiprow"><span class="chip">WebSockets</span><span class="chip">JavaScript</span></div>
+        <a class="launch" href="apps/devlive/index.html">Launch demo &rarr;</a>
+      </div>
+
+      <div class="tile">
+        <span class="cat mono">Games &amp; Interactive Media</span>
+        <h3>FlappyBird</h3>
+        <p>A polished Flappy Bird clone &mdash; canvas graphics and physics, synthesized sound effects, no asset files.</p>
+        <div class="chiprow"><span class="chip">Canvas</span><span class="chip">Web Audio</span></div>
+        <a class="launch" href="apps/flappybird/index.html">Launch demo &rarr;</a>
+      </div>
+
+      <div class="tile">
+        <span class="cat mono">Hardware, Embedded &amp; Robotics</span>
+        <h3>RoverSim</h3>
+        <p>2D differential-drive robot simulator &mdash; PID waypoint control and ray-cast range sensors, ported to a live canvas animation.</p>
+        <div class="chiprow"><span class="chip">Robotics</span><span class="chip">Control Systems</span></div>
+        <a class="launch" href="apps/roversim/index.html">Launch demo &rarr;</a>
+      </div>
+
+      <div class="tile">
+        <span class="cat mono">Audio, Music &amp; Creative Tech</span>
+        <h3>BeatForge</h3>
+        <p>Browser step-sequencer drum machine &mdash; synthesized drum voices and a sample-accurate lookahead scheduler.</p>
+        <div class="chiprow"><span class="chip">Web Audio API</span><span class="chip">JavaScript</span></div>
+        <a class="launch" href="apps/beatforge/index.html">Launch demo &rarr;</a>
+      </div>
+
+      <div class="tile">
+        <span class="cat mono">Automation &amp; Productivity</span>
+        <h3>FocusGuard</h3>
+        <p>Pomodoro timer, site-blocklist, and reading-time estimator built as a Manifest V3 browser extension. This demo runs its exact timer/blocklist logic in a standalone page.</p>
+        <div class="chiprow"><span class="chip">Chrome Extension</span><span class="chip">JavaScript</span></div>
+        <a class="launch" href="apps/focusguard/index.html">Launch demo &rarr;</a>
+      </div>
+
+      <div class="tile">
+        <span class="cat mono">Security &amp; Cryptography</span>
+        <h3>VaultKey</h3>
+        <p>Encrypted password manager &mdash; AES-GCM with PBKDF2 key derivation, per-vault salt, authenticated failure. This demo uses the browser's native Web Crypto API.</p>
+        <div class="chiprow"><span class="chip">Web Crypto API</span><span class="chip">AES-GCM</span></div>
+        <a class="launch" href="apps/vaultkey/index.html">Launch demo &rarr;</a>
+      </div>
+
+      <div class="tile">
+        <span class="cat mono">Niche &amp; Experimental</span>
+        <h3>CellPlay</h3>
+        <p>Cellular automata playground &mdash; Conway's Life, Langton's Ant, and Wireworld with a custom rule editor.</p>
+        <div class="chiprow"><span class="chip">Canvas</span><span class="chip">JavaScript</span></div>
+        <a class="launch" href="apps/cellplay/index.html">Launch demo &rarr;</a>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Every demo above runs entirely in your browser &mdash; nothing is sent to a server. Full source, tests, and READMEs for each project are linked from <a href="index.html">the main portfolio</a>.</p>
+  </div>
+</footer>
+
+</body>
+</html>

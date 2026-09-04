@@ -1,0 +1,23 @@
+# Core
+kaggle
+numpy
+scipy
+pandas
+scikit-image
+zarr
+dask
+tqdm
+
+# Detection / tracking (baseline stack)
+laptrack        # LAP-based linking + division handling
+ultrack         # host-team's own tracking library (Bragantini et al.) - strong baseline fit
+stardist        # pretrained 3D nuclei detection (fallback / candidate detector)
+cellpose        # alt pretrained 3D detector
+
+# Dev/GPU
+torch
+tensorflow      # required by stardist
+
+# Viz / EDA
+matplotlib
+napari

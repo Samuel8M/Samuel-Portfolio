@@ -1,0 +1,247 @@
+:root {
+  --bg: #14151a;
+  --panel: #1d1f27;
+  --panel-alt: #262834;
+  --border: #33364500;
+  --text: #e9e9ef;
+  --text-dim: #9294a3;
+  --accent: #6c8cff;
+  --accent-hover: #7f9dff;
+  --step-off: #2b2d3a;
+  --step-on: var(--accent);
+  --step-beat: #383b4c;
+  --step-playhead: #ffd166;
+  --radius: 8px;
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.app-header {
+  padding: 2rem 1.5rem 0.5rem;
+  text-align: center;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  letter-spacing: 0.04em;
+  background: linear-gradient(90deg, var(--accent), #a3b8ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  margin: 0.4rem 0 0;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+
+.app {
+  max-width: 960px;
+  margin: 1.5rem auto;
+  padding: 0 1.5rem;
+}
+
+.transport {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  background: var(--panel);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.btn {
+  background: var(--panel-alt);
+  color: var(--text);
+  border: 1px solid #3a3d4d;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.05s ease;
+}
+
+.btn:hover {
+  background: #313342;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #10111a;
+  font-weight: 600;
+  min-width: 5.5rem;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-primary[aria-pressed="true"] {
+  background: #ff6b6b;
+  border-color: #ff6b6b;
+  color: #1a0e0e;
+}
+
+.tempo-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.tempo-control input[type="range"] {
+  accent-color: var(--accent);
+}
+
+.tempo-control input[type="number"] {
+  width: 4rem;
+  background: var(--panel-alt);
+  border: 1px solid #3a3d4d;
+  border-radius: 6px;
+  color: var(--text);
+  padding: 0.3rem 0.4rem;
+}
+
+.save-load {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-left: auto;
+}
+
+.save-status {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  min-width: 6rem;
+}
+
+.sequencer {
+  background: var(--panel);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+
+.track-row {
+  display: grid;
+  grid-template-columns: 140px repeat(16, minmax(28px, 1fr));
+  align-items: center;
+  gap: 6px;
+}
+
+.track-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding-right: 0.5rem;
+}
+
+.track-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.track-controls {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 0 0.2rem 0;
+}
+
+.track-controls label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  min-width: 140px;
+}
+
+.track-controls input[type="range"] {
+  flex: 1;
+  max-width: 220px;
+  accent-color: var(--accent);
+}
+
+.step {
+  aspect-ratio: 1 / 1;
+  border-radius: 5px;
+  background: var(--step-off);
+  border: none;
+  cursor: pointer;
+  transition: background 0.08s ease, transform 0.05s ease;
+}
+
+.step:hover {
+  filter: brightness(1.25);
+}
+
+.step:active {
+  transform: scale(0.92);
+}
+
+.step.beat-marker {
+  background: var(--step-beat);
+}
+
+.step.on {
+  background: var(--step-on);
+}
+
+.step.playing {
+  outline: 2px solid var(--step-playhead);
+  outline-offset: -2px;
+}
+
+.hint {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  margin-top: 1rem;
+}
+
+.app-footer {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  padding: 2rem 1rem 2.5rem;
+}
+
+.app-footer a {
+  color: var(--accent);
+}
+
+@media (max-width: 720px) {
+  .track-row {
+    grid-template-columns: 90px repeat(16, minmax(20px, 1fr));
+  }
+
+  .track-controls label {
+    min-width: 90px;
+  }
+}

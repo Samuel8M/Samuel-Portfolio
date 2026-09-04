@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PathFinder — Pathfinding &amp; Maze Visualizer</title>
+    <script type="module" crossorigin src="./assets/index-xbw2xp0D.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CAMeU2HN.css">
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <h1>PathFinder</h1>
+        <p class="subtitle">Pathfinding &amp; maze-generation visualizer</p>
+      </header>
+
+      <main class="layout">
+        <section class="controls" aria-label="Controls">
+          <div class="control-group">
+            <label for="algorithm-select">Algorithm</label>
+            <select id="algorithm-select">
+              <option value="bfs">Breadth-First Search</option>
+              <option value="dfs">Depth-First Search</option>
+              <option value="dijkstra">Dijkstra</option>
+              <option value="astar">A* Search</option>
+            </select>
+          </div>
+
+          <div class="control-group buttons">
+            <button id="visualize-btn" type="button">Visualize</button>
+            <button id="generate-maze-btn" type="button">Generate Maze</button>
+            <button id="clear-walls-btn" type="button">Clear Walls</button>
+            <button id="reset-btn" type="button">Reset Grid</button>
+          </div>
+
+          <div class="control-group">
+            <label for="speed-range">Animation speed</label>
+            <input id="speed-range" type="range" min="1" max="100" value="60" />
+          </div>
+
+          <div class="control-group tool-hint">
+            <p>
+              <strong>Drag</strong> the green node to move Start, the red node
+              to move End. <strong>Click/drag</strong> elsewhere to draw or
+              erase walls.
+            </p>
+          </div>
+
+          <div class="control-group stats" aria-live="polite">
+            <div class="stat">
+              <span class="stat-label">Visited nodes</span>
+              <span id="stat-visited" class="stat-value">0</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Path length</span>
+              <span id="stat-path-length" class="stat-value">–</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Path cost</span>
+              <span id="stat-path-cost" class="stat-value">–</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Status</span>
+              <span id="stat-status" class="stat-value">Idle</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="board" aria-label="Grid">
+          <canvas id="grid-canvas"></canvas>
+        </section>
+      </main>
+
+      <footer class="foot">
+        <p>
+          Built with vanilla TypeScript, Vite, and the HTML5 Canvas API.
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

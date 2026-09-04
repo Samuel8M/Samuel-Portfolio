@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SnapLinks — Live Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="mark">Snap<span class="dot">Links</span></div>
+      <div class="tag mono">Client-only demo &mdash; localStorage, no backend</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="intro">
+      <p class="eyebrow mono">Live in-browser demo</p>
+      <h1>A short-link service that never leaves your browser.</h1>
+      <p class="lede">
+        Create a short link, give it a custom slug or let one be generated, then click
+        <strong>Visit</strong> to simulate a click. Everything below — links, click counts,
+        timestamps — is read from and written to your browser's
+        <code class="mono">localStorage</code>. Reload the page and it's all still here.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2 class="mono section-title">Create a short link</h2>
+      <form id="create-form" novalidate>
+        <div class="field">
+          <label for="url">Destination URL</label>
+          <input id="url" name="url" type="text" placeholder="https://example.com/some/long/path" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label for="slug">Custom slug <span class="muted">(optional &mdash; 3&ndash;32 chars, letters/numbers/-/_)</span></label>
+          <input id="slug" name="slug" type="text" placeholder="my-link" autocomplete="off" />
+        </div>
+        <button type="submit" class="btn">Shorten it</button>
+      </form>
+      <p id="create-error" class="error" role="alert" hidden></p>
+
+      <div id="create-result" class="create-result" hidden>
+        <span class="ok-mark mono">&#10003; created</span>
+        <code id="result-slug" class="mono result-slug"></code>
+        <span class="mono">&rarr;</span>
+        <span id="result-target" class="result-target"></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2 class="mono section-title">Your links <span id="link-count" class="muted mono"></span></h2>
+        <button id="reset-btn" type="button" class="btn ghost small">Clear all demo data</button>
+      </div>
+      <div id="empty-state" class="empty-state">
+        No links yet &mdash; create one above to get started.
+      </div>
+      <ul id="link-list" class="link-list"></ul>
+    </section>
+
+    <section id="stats-card" class="card" hidden>
+      <div class="section-head">
+        <h2 class="mono section-title">Stats for <code id="stats-slug" class="mono"></code></h2>
+        <button id="stats-close" type="button" class="btn ghost small">Close</button>
+      </div>
+      <dl class="stats-grid">
+        <dt>Destination</dt>
+        <dd id="stat-target" class="mono"></dd>
+        <dt>Created</dt>
+        <dd id="stat-created" class="mono"></dd>
+        <dt>Total simulated clicks</dt>
+        <dd id="stat-count" class="mono"></dd>
+      </dl>
+      <h3 class="mono timeline-title">Click timeline</h3>
+      <ul id="stat-timeline" class="timeline"></ul>
+    </section>
+
+    <section class="card note-card">
+      <h2 class="mono section-title">How this demo differs from the real app</h2>
+      <ul class="note-list">
+        <li>The original SnapLinks is a Node/Express + SQLite service that issues real HTTP 302 redirects for any slug. This page has no server, so <strong>Visit</strong> only records a simulated click locally &mdash; it never navigates anywhere.</li>
+        <li>Data lives in this browser tab's <code class="mono">localStorage</code>, scoped to this page's origin. It is not shared across devices or visible to anyone else, and clearing site data or using a private window resets it.</li>
+        <li>Validation, slug generation, and stats aggregation are ported line-for-line in spirit from the original <code class="mono">src/linkService.js</code>, just swapping better-sqlite3 queries for localStorage reads/writes.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="js/linkService.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

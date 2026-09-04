@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FlappyBird — Samuel McMillan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{ --bg:#edf1ee; --surface:#ffffff; --line:#cdd7d1; --text:#10201c; --text-muted:#4e5f59; --accent:#b25e28; --accent-2:#2f7a72; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#0b1614; --surface:#101f1c; --line:#294139; --text:#e9f1ec; --text-muted:#93a8a0; --accent:#e2984f; --accent-2:#5fc9bd; } }
+  :root[data-theme="dark"]{ --bg:#0b1614; --surface:#101f1c; --line:#294139; --text:#e9f1ec; --text-muted:#93a8a0; --accent:#e2984f; --accent-2:#5fc9bd; }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;background:var(--bg);}
+  body{display:flex;flex-direction:column;}
+  .bar{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:11px 18px; border-bottom:1px solid var(--line); background:var(--surface);
+    font-family:"IBM Plex Mono",monospace; flex:0 0 auto;
+  }
+  .bar a{ color:var(--text-muted); text-decoration:none; font-size:12px; letter-spacing:.05em; text-transform:uppercase; }
+  .bar a:hover{ color:var(--accent); }
+  .bar .title{ font-family:"Big Shoulders Display",sans-serif; font-weight:800; font-size:15px; letter-spacing:.02em; text-transform:uppercase; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .bar .title .cat{ color:var(--accent-2); font-weight:600; }
+  iframe{ flex:1 1 auto; width:100%; border:0; background:#fff; }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a href="../../side-projects.html">&larr; All Side Projects</a>
+    <div class="title">FlappyBird <span class="cat">/ Games &amp; Interactive Media</span></div>
+    <a href="app/index.html" target="_blank" rel="noopener">Open in new tab &#8599;</a>
+  </div>
+  <iframe src="app/index.html" title="FlappyBird live demo"></iframe>
+</body>
+</html>

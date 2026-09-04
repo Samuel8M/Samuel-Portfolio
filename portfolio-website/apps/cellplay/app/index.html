@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CellPlay &mdash; Cellular Automata Playground</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <h1>CellPlay</h1>
+      <p class="subtitle">A little playground for cellular automata &mdash; click cells, tweak rules, hit play.</p>
+    </header>
+
+    <main class="layout">
+      <section class="canvas-panel">
+        <canvas id="grid-canvas" width="640" height="640" aria-label="Automaton grid"></canvas>
+        <p class="hint" id="canvas-hint">Click a cell to toggle it.</p>
+      </section>
+
+      <aside class="controls" aria-label="Simulation controls">
+        <div class="control-group">
+          <label for="automaton-select">Automaton</label>
+          <select id="automaton-select">
+            <option value="lifelike">Life-like (B/S rule)</option>
+            <option value="langton">Langton's Ant</option>
+            <option value="wireworld">Wireworld</option>
+          </select>
+        </div>
+
+        <div class="control-group" id="rule-group">
+          <label for="rule-preset">Rule preset</label>
+          <select id="rule-preset">
+            <option value="B3/S23">Conway's Life (B3/S23)</option>
+            <option value="B36/S23">HighLife (B36/S23)</option>
+            <option value="B2/S">Seeds (B2/S)</option>
+            <option value="B3678/S34678">Day &amp; Night (B3678/S34678)</option>
+            <option value="custom">Custom&hellip;</option>
+          </select>
+          <input type="text" id="rule-input" value="B3/S23" spellcheck="false" aria-label="Rule string" />
+          <p class="field-note" id="rule-error"></p>
+        </div>
+
+        <div class="control-group">
+          <label for="size-input">Grid size <span id="size-value">60</span>&times;<span id="size-value-2">60</span></label>
+          <input type="range" id="size-input" min="10" max="150" step="5" value="60" />
+        </div>
+
+        <div class="control-group">
+          <label for="speed-input">Speed <span id="speed-value">10</span> steps/sec</label>
+          <input type="range" id="speed-input" min="1" max="60" step="1" value="10" />
+        </div>
+
+        <div class="control-group buttons">
+          <button id="play-pause-btn" class="primary">Play</button>
+          <button id="step-btn">Step</button>
+        </div>
+
+        <div class="control-group buttons">
+          <button id="randomize-btn">Randomize</button>
+          <button id="clear-btn">Clear</button>
+        </div>
+
+        <div class="control-group buttons">
+          <button id="example-btn">Load Example</button>
+        </div>
+
+        <div class="control-group">
+          <p class="field-note" id="status-note">Generation: 0</p>
+        </div>
+
+        <div class="control-group legend" id="legend"></div>
+      </aside>
+    </main>
+
+    <footer class="app-footer">
+      <p>
+        Built with vanilla JS + HTML5 Canvas, no build step.
+        The stepping logic in <code>automata.js</code> is unit tested with plain <code>node</code> &mdash;
+        see <code>test/gol.test.js</code>.
+      </p>
+    </footer>
+  </div>
+
+  <script src="automata.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
