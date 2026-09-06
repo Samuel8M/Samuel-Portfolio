@@ -111,6 +111,30 @@
   }
   .launch.ghost:hover{ border-color: var(--accent); opacity: 1; color: var(--accent); }
 
+  /* The one entry here that isn't a self-contained browser demo — a real
+     production app with a live server/database and a published Android
+     app — so it gets its own wider, distinguished treatment up top
+     rather than blending into the demo grid. */
+  .tile.flagship{
+    grid-column: 1 / -1;
+    border-left: 3px solid var(--accent);
+    padding: clamp(24px,3vw,34px);
+  }
+  .tile.flagship .cat{ color: var(--accent); }
+  .live-badge{
+    display:inline-flex; align-items:center; gap:7px;
+    font-family:"IBM Plex Mono", monospace; font-size: 11.5px; letter-spacing:0.08em; text-transform:uppercase;
+    color: var(--accent-2); margin-top: -2px;
+  }
+  .live-badge::before{
+    content:""; width:6px; height:6px; border-radius:50%; background: var(--accent-2);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-2) 20%, transparent);
+    animation: livepulse 2s ease-in-out infinite;
+  }
+  @keyframes livepulse{ 0%,100%{ opacity:1; } 50%{ opacity:0.35; } }
+  @media (prefers-reduced-motion: reduce){ .live-badge::before{ animation: none; } }
+  .flagship-links{ display:flex; flex-wrap:wrap; gap: 10px; margin-top: 4px; }
+
   footer{ padding: 32px 0 56px; border-top: 1px solid var(--line); }
   footer p{ color: var(--text-muted); font-size: 14px; }
   footer a{ color: var(--accent-2); text-decoration:none; }
@@ -130,13 +154,25 @@
   <div class="wrap">
     <div class="eyebrow">Live in this browser &middot; no install required</div>
     <h1>Side Projects</h1>
-    <p class="lede">One self-directed, fully working build per domain of the discipline &mdash; from pathfinding algorithms to a hand-rolled WebSocket server to an encrypted password vault. Every tile below opens a real, running instance of that project, not a screenshot.</p>
+    <p class="lede">One self-directed, fully working build per domain of the discipline &mdash; from pathfinding algorithms to a hand-rolled WebSocket server to an encrypted password vault. Every tile below opens a real, running instance of that project, not a screenshot &mdash; except the first, which goes a step further: a live, deployed production app, not a browser demo.</p>
   </div>
 </header>
 
 <main>
   <div class="wrap">
     <div class="grid">
+
+      <div class="tile flagship">
+        <span class="cat mono">Full-Stack &middot; Production</span>
+        <span class="live-badge">Live in production, real users</span>
+        <h3>HandyNeighbors</h3>
+        <p>A free, ad-free marketplace where individual handymen list skills, equipment, and hourly rate, and neighbors browse, price-check, and hire &mdash; no companies, no fees, no ads. Full account system with email verification, two-sided ratings (customers rate workers <em>and</em> workers rate customers back), admin-facing content moderation with a report/ban pipeline, and a published Android app on Google Play via a Trusted Web Activity. This one isn't a demo running in your browser &mdash; it's a real deployed service, backed by its own server and database, that anyone can sign up to and use right now.</p>
+        <div class="chiprow"><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">SQLite</span><span class="chip">Android / TWA</span><span class="chip">Google Play</span></div>
+        <div class="flagship-links">
+          <a class="launch" href="https://handyneighbors.onrender.com" target="_blank" rel="noopener noreferrer">Visit live site &rarr;</a>
+          <a class="launch ghost" href="https://github.com/Samuel8M/HandyNeighbors-Marketplace" target="_blank" rel="noopener noreferrer">View source &rarr;</a>
+        </div>
+      </div>
 
       <div class="tile">
         <span class="cat mono">Web &amp; Internet</span>
@@ -240,7 +276,7 @@
 
 <footer>
   <div class="wrap">
-    <p>Every demo above runs entirely in your browser &mdash; nothing is sent to a server. Full source, tests, and READMEs for each project are linked from <a href="index.html">the main portfolio</a>.</p>
+    <p>Every demo below the top entry runs entirely in your browser &mdash; nothing is sent to a server. HandyNeighbors is the exception: a real deployed app with its own live server and database. Full source, tests, and READMEs for each project are linked from <a href="index.html">the main portfolio</a>.</p>
   </div>
 </footer>
 
